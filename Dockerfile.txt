@@ -1,0 +1,18 @@
+# Use official PHP with Apache
+FROM php:8.2-apache
+
+# Copy all files into Apache web directory
+COPY . /var/www/html/
+
+# Give Apache permission
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
+
+# Enable Apache mod_rewrite (good for forms / clean URLs)
+RUN a2enmod rewrite
+
+# Expose port 80
+EXPOSE 80
+
+# Start Apache automatically
+CMD ["apache2-foreground"]
